@@ -19,6 +19,7 @@ packages = [
 ansibulled = "ansibulled.cli.ansibulled:main"
 ansibulled-changelog = "ansibulled.cli.ansibulled_changelog:main"
 ansibulled-lint-changelog-yaml = "ansibulled.cli.ansibulled_lint_changelog_yaml:main"
+ansibulled-docs = "ansibulled.cli.ansibulled_docs:main"
 
 [tool.poetry.dependencies]
 python = "^3.6.0"
