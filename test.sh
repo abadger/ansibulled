@@ -1,4 +1,4 @@
 #!/bin/sh
 
 args=${1-tests}
-python3.8 -m pytest --cov-branch --cov=ansibulled $args -vv
+PYTHONPATH=src poetry run python -m pytest --cov-branch --cov=ansibulled $args -vv
