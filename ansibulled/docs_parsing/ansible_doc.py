@@ -12,9 +12,9 @@ from typing import TYPE_CHECKING, Any, Dict
 
 import sh
 
-from .compat import best_get_loop
-from .constants import DOCUMENTABLE_PLUGINS
-from .vendored.json_utils import _filter_non_json_lines
+from ..compat import best_get_loop
+from ..constants import DOCUMENTABLE_PLUGINS
+from ..vendored.json_utils import _filter_non_json_lines
 
 if TYPE_CHECKING:
     from .venv import VenvRunner

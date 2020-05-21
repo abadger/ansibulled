@@ -31,56 +31,6 @@ class MalformedDocumentation(Exception):
     """Raised when module documentation is malformed"""
 
 
-def init_plugin_doc_arg_parser(parser):
-    """
-    Initialize the common command line argument parsing for all plugin docs
-
-    :arg parser: The parser to add the arguments to
-
-    .. note:: This function operates by side-effect, modifying the `parser`
-    """
-    parser.add_argument("-P", "--plugin-type", action="store", dest="plugin_type",
-                        default='module', help="The type of plugin (module, lookup, etc)")
-    parser.add_argument("-T", "--template-dir", action="append", dest="template_dir",
-                        help="directory containing Jinja2 templates")
-    parser.add_argument("-o", "--output-dir", action="store", dest="output_dir", default=None,
-                        help="Output directory for generated doc files")
-    parser.add_argument("-l", "--limit-to-modules", '--limit-to', action="store",
-                        dest="limit_to", default=None, help="Limit building module documentation"
-                        " to comma-separated list of plugins. Specify non-existing plugin name"
-                        " for no plugins.")
-    parser.add_argument('-v', '--verbose', dest='verbosity', default=0, action="count",
-                        help="verbose mode (increase number of 'v's for more)")
-
-
-def plugin_output_directory(plugin_type, output_dir):
-    """
-    Determine the output directory based on the plugin_type
-
-    For backwards link compatibility, modules are in a toplevel modules directory while other
-    plugins are in a subdirectory of plugins
-    """
-    if plugin_type == 'module':
-        return '%s/modules' % (output_dir,)
-    return '%s/plugins/%s' % (output_dir, plugin_type)
-
-
-def plugin_filename_format(plugin_type):
-    """
-    Determine the filename format string to use for this type of plugin
-
-    For backwards link compatibility, modules use a format of ``<module>_module.rst``
-    whereas other plugins just use ``<module>.rst``.
-    """
-    if plugin_type == 'module':
-        output_name = '%s_' + '%s.rst' % plugin_type
-    else:
-        # for plugins, just use 'ssh.rst' vs 'ssh_module.rst'
-        output_name = '%s.rst'
-
-    return output_name
-
-
 def _normalize_options(value):
     """Normalize boolean option value."""
 
@@ -93,6 +43,24 @@ def _normalize_options(value):
 
 
 def _add_full_key_to_returndocs(returndocs, full_key=None):
+    """
+    Add a list of the heirarchical elements to pass through to every return key in returndocs.
+
+    :arg returndocs: The returndocs dict to work through to add full_key entries.
+    :kwarg full_key: If we're called recursively, then this is the full_key determined so far.
+    :returns: New version of returndocs that has a key for each return entry named `full_key`.
+        The entry is a list of all the elements passed through to get to this entry.  For
+        instance, if the return value looks like this::
+
+            {"databases":
+                "database_name":
+                    "access_priv": ...
+            }
+
+        then the full_key entry for access_priv will be::
+
+            ['databases', 'database_name', 'access_priv']
+    """
     if full_key is None:
         full_key = []
 

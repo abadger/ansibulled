@@ -50,7 +50,7 @@ def writable_via_acls(path: str, euid: int) -> bool:
     for acl in (a for a in acls.splitlines() if not a.startswith('#')):
         type_, principal, permissions = acl.rsplit(':', 2)
         # default acls have the same issues as acls directly on the directory
-        if type_.startwith('default:'):
+        if type_.startswith('default:'):
             dummy_, type_ = type_.split(':', 1)
 
         # All the safe things:
