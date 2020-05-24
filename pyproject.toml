@@ -12,7 +12,7 @@ readme = "README.md"
 repository = "https://github.com/ansible-community/ansibulled"
 packages = [
     { include = "ansibulled", from="src" },
-    { include = "tests", format = "sdist" }
+    { include = "tests", from="src", format = "sdist" }
 ]
 
 [tool.poetry.scripts]
